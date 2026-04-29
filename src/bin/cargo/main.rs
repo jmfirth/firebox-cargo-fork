@@ -351,6 +351,13 @@ fn is_executable<P: AsRef<Path>>(path: P) -> bool {
         .map(|metadata| metadata.is_file() && metadata.permissions().mode() & 0o111 != 0)
         .unwrap_or(false)
 }
+#[cfg(target_os = "wasi")]
+fn is_executable<P: AsRef<Path>>(path: P) -> bool {
+    // wasi has no per-file mode bits; treat any regular file as executable
+    // (cargo's PATH scan only invokes this when looking up extensions like
+    // `cargo-foo`, all of which are .wasm modules under firebox).
+    fs::metadata(path).map(|m| m.is_file()).unwrap_or(false)
+}
 #[cfg(windows)]
 fn is_executable<P: AsRef<Path>>(path: P) -> bool {
     path.as_ref().is_file()

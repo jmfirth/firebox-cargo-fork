@@ -651,6 +651,24 @@ mod imp {
     }
 }
 
+#[cfg(target_os = "wasi")]
+mod imp {
+    // wasi has no TIOCGWINSZ ioctl; cargo running inside firebox doesn't
+    // have a controlling terminal in the unix sense. Always report NoTty;
+    // err_erase_line still emits the ANSI EL sequence so callers that
+    // capture stderr to a real terminal still see correct output.
+    use super::{Shell, TtyWidth};
+    use std::io::Write;
+
+    pub fn stderr_width() -> TtyWidth {
+        TtyWidth::NoTty
+    }
+
+    pub fn err_erase_line(shell: &mut Shell) {
+        let _ = shell.output.stderr().write_all(b"\x1B[K");
+    }
+}
+
 #[cfg(windows)]
 mod imp {
     use std::{cmp, mem, ptr};

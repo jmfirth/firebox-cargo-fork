@@ -138,6 +138,13 @@ pub fn exit_status_to_string(status: ExitStatus) -> String {
         }
     }
 
+    #[cfg(target_os = "wasi")]
+    fn status_to_string(status: ExitStatus) -> String {
+        // wasi has no signals — ExitStatus is just the proc_exit code.
+        // Default Display already formats it appropriately.
+        status.to_string()
+    }
+
     #[cfg(windows)]
     fn status_to_string(status: ExitStatus) -> String {
         use windows_sys::Win32::Foundation::*;

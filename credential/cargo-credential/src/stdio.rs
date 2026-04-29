@@ -79,6 +79,31 @@ mod imp {
     }
 }
 
+#[cfg(target_os = "wasi")]
+mod imp {
+    // wasi has no controlling tty / terminal device. Credential prompts
+    // that rely on /dev/tty are a no-op here: redirect everything to
+    // /dev/null and the ReplacementGuard does nothing. cargo-credential's
+    // password prompt path won't function on wasi, but cargo's normal
+    // crates.io fetch (no auth needed) is unaffected.
+    use super::Stdio;
+    use std::{fs::File, io::Error};
+    pub const IN_DEVICE: &str = "/dev/null";
+    pub const OUT_DEVICE: &str = "/dev/null";
+    pub const NULL_DEVICE: &str = "/dev/null";
+
+    pub struct ReplacementGuard;
+
+    impl ReplacementGuard {
+        pub(super) fn new(
+            _stdio: Stdio,
+            _replacement: &mut File,
+        ) -> Result<ReplacementGuard, Error> {
+            Ok(ReplacementGuard)
+        }
+    }
+}
+
 #[cfg(unix)]
 mod imp {
     use super::Stdio;

@@ -601,6 +601,28 @@ mod imp {
     }
 }
 
+#[cfg(target_os = "wasi")]
+mod imp {
+    use super::{ProcessBuilder, ProcessError};
+    use anyhow::Result;
+    use std::io;
+
+    pub fn exec_replace(process_builder: &ProcessBuilder) -> Result<()> {
+        // wasi has no execve / process replacement. Fall back to running
+        // the process inline and propagating the error. cargo's `run` and
+        // `install` paths use exec_replace mainly to forward signals on
+        // unix; on wasi we just exec normally.
+        process_builder.exec()
+    }
+
+    pub fn command_line_too_big(_err: &io::Error) -> bool {
+        // wasi has no documented argv-too-big errno. Conservative: never
+        // retry with argfile. Worst case a slightly larger command line
+        // hits a real error and bubbles up.
+        false
+    }
+}
+
 #[cfg(windows)]
 mod imp {
     use super::{ProcessBuilder, ProcessError};

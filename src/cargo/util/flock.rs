@@ -535,6 +535,51 @@ mod sys {
     }
 }
 
+#[cfg(target_os = "wasi")]
+mod sys {
+    // wasix-libc ships sys/file.h declaring flock(int, int) but no
+    // implementation in libc.a (only flockfile, which is the POSIX FILE*
+    // stream lock — different syscall). Without an implementation, an
+    // extern "C" declaration becomes a wasm `env.flock` import that
+    // wasmer's WASIX runtime refuses to satisfy at instantiation.
+    //
+    // For #186 cargo M2, all lock ops are stubbed out: cargo's flock is
+    // best-effort cache corruption protection across concurrent invocations,
+    // and firebox runs one cargo at a time. A correct implementation would
+    // be a fcntl(F_SETLK)-based shim or a wasix-libc patch adding flock; both
+    // tracked as future work.
+    use std::fs::File;
+    use std::io::{Error, Result};
+
+    pub(super) fn lock_shared(_file: &File) -> Result<()> {
+        Ok(())
+    }
+
+    pub(super) fn lock_exclusive(_file: &File) -> Result<()> {
+        Ok(())
+    }
+
+    pub(super) fn try_lock_shared(_file: &File) -> Result<()> {
+        Ok(())
+    }
+
+    pub(super) fn try_lock_exclusive(_file: &File) -> Result<()> {
+        Ok(())
+    }
+
+    pub(super) fn unlock(_file: &File) -> Result<()> {
+        Ok(())
+    }
+
+    pub(super) fn error_contended(_err: &Error) -> bool {
+        false
+    }
+
+    pub(super) fn error_unsupported(_err: &Error) -> bool {
+        false
+    }
+}
+
 #[cfg(windows)]
 mod sys {
     use std::fs::File;

@@ -1,3 +1,7 @@
+// Firebox: util/flock.rs uses std::os::wasi::io::AsRawFd in its wasi mod sys
+// arm (#186). Opt into the unstable wasi_ext feature on wasi targets.
+#![cfg_attr(target_os = "wasi", feature(wasi_ext))]
+
 //! # Cargo as a library
 //!
 //! There are two places you can find API documentation of cargo-the-library,

@@ -5,6 +5,10 @@
 //! > crate may make major changes to its APIs or be deprecated without warning.
 
 #![allow(clippy::disallowed_methods)]
+// Firebox #186: std::os::wasi::{ffi, fs} are gated behind the wasi_ext
+// unstable feature. cargo-util's wasm cfg arms in paths.rs reach into
+// those modules; opt the crate into the feature on wasm targets only.
+#![cfg_attr(target_os = "wasi", feature(wasi_ext))]
 
 pub use self::read2::read2;
 pub use du::du;

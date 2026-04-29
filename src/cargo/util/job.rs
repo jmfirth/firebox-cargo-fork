@@ -45,6 +45,18 @@ mod imp {
     }
 }
 
+#[cfg(target_os = "wasi")]
+mod imp {
+    // wasi has no Job Object analogue, no setsid, and no signal-based
+    // process-tree teardown. Cargo running inside firebox manages its own
+    // process group via WASIX proc_spawn semantics; this Setup is a no-op.
+    pub type Setup = ();
+
+    pub unsafe fn setup() -> Option<()> {
+        Some(())
+    }
+}
+
 #[cfg(windows)]
 mod imp {
     use std::io;

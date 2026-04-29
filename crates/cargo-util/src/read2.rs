@@ -81,6 +81,33 @@ mod imp {
     }
 }
 
+#[cfg(target_os = "wasi")]
+mod imp {
+    use std::io::{self, Read};
+    use std::process::{ChildStderr, ChildStdout};
+
+    // wasi stub: read both pipes sequentially to completion. The unix path
+    // uses pollfd + non-blocking reads to interleave stdout/stderr; wasi
+    // exposes neither, so we read stdout fully then stderr fully and emit
+    // each as a single batch. cargo's read2 callers receive correct end
+    // output but lose the live progress interleaving. Acceptable for M2.
+    pub fn read2(
+        mut out_pipe: ChildStdout,
+        mut err_pipe: ChildStderr,
+        data: &mut dyn FnMut(bool, &mut Vec<u8>, bool),
+    ) -> io::Result<()> {
+        let mut out = Vec::new();
+        out_pipe.read_to_end(&mut out)?;
+        data(true, &mut out, true);
+
+        let mut err = Vec::new();
+        err_pipe.read_to_end(&mut err)?;
+        data(false, &mut err, true);
+
+        Ok(())
+    }
+}
+
 #[cfg(windows)]
 mod imp {
     use std::io;
