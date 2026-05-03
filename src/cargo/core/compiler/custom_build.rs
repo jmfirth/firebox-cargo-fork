@@ -347,8 +347,29 @@ fn build_work(build_runner: &mut BuildRunner<'_, '_>, unit: &Unit) -> CargoResul
         prepare_metabuild(build_runner, build_script_unit, deps)?;
     }
 
-    // Building the command to execute
-    let to_exec = script_dir.join(unit.target.name());
+    // Building the command to execute.
+    //
+    // The build-script binary lives in `script_dir` under
+    // `<target.name()>` on hosts where executables have no suffix (Linux,
+    // macOS) and `<target.name()>.exe` on Windows. On WebAssembly hosts
+    // (notably wasm32-wasmer-wasi when cargo itself is compiled to run on
+    // a wasi host) the build-script binary is named `<target.name()>.wasm`
+    // because the target's `exe_suffix` is `.wasm` and `Command::new` does
+    // not auto-probe extensions. Honouring `env::consts::EXE_SUFFIX` here
+    // keeps the spawn target in lockstep with the host's hardlink uplift
+    // (`uplift_filename` in `core/compiler/build_context/target_info.rs`
+    // already appends the same suffix).
+    //
+    // On Linux/macOS this is a no-op (`EXE_SUFFIX = ""`); on Windows it
+    // matches the existing implicit `.exe` behaviour; on wasi-as-host it
+    // closes the gap that surfaced as firebox#216 (cargo on wasi could not
+    // spawn its own build scripts because the file was at `…/foo.wasm`
+    // and cargo asked for `…/foo`).
+    let to_exec = script_dir.join(format!(
+        "{}{}",
+        unit.target.name(),
+        std::env::consts::EXE_SUFFIX
+    ));
 
     // Start preparing the process to execute, starting out with some
     // environment variables. Note that the profile-related environment
