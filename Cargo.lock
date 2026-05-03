@@ -869,6 +869,7 @@ checksum = "9b10589d1a5e400d61f9f38f12f884cfd080ff345de8f17efda36fe0e4a02aa8"
 [[package]]
 name = "curl"
 version = "0.4.48"
+source = "git+https://github.com/jmfirth/firebox-curl?branch=firebox-patches#ee236f579941e67143d57e20374ac6d4625482e3"
 dependencies = [
  "curl-sys",
  "libc",
@@ -882,6 +883,7 @@ dependencies = [
 [[package]]
 name = "curl-sys"
 version = "0.4.82+curl-8.14.1"
+source = "git+https://github.com/jmfirth/firebox-curl-sys?branch=firebox-patches#4d49d419d50c7f484f3f752683bc8f6b4e0c5d13"
 dependencies = [
  "cc",
  "libc",
@@ -1326,6 +1328,7 @@ checksum = "07e28edb80900c19c28f1072f2e8aeca7fa06b23cd4169cefe1af5aa3260783f"
 [[package]]
 name = "git2"
 version = "0.20.2"
+source = "git+https://github.com/jmfirth/firebox-git2?branch=firebox-patches#b777902020e28b5b1cf74b11f33bc919eb3f6170"
 dependencies = [
  "bitflags",
  "libc",
@@ -1648,6 +1651,7 @@ dependencies = [
 [[package]]
 name = "gix-fs"
 version = "0.16.0"
+source = "git+https://github.com/jmfirth/firebox-gix-fs?branch=firebox-patches#c5bef227ef88a98093632f645200f294b75eccb7"
 dependencies = [
  "bstr",
  "fastrand",
@@ -1708,6 +1712,7 @@ dependencies = [
 [[package]]
 name = "gix-index"
 version = "0.41.0"
+source = "git+https://github.com/jmfirth/firebox-gix-index?branch=firebox-patches#49b391543153b6d5f02181645a14b091d78d0567"
 dependencies = [
  "bitflags",
  "bstr",
@@ -1803,6 +1808,7 @@ dependencies = [
 [[package]]
 name = "gix-pack"
 version = "0.60.0"
+source = "git+https://github.com/jmfirth/firebox-gix-pack?branch=firebox-patches#b03197145e7c63a9e5c0fe1c5127b5b5e6bf0728"
 dependencies = [
  "clru",
  "gix-chunk",
@@ -2310,6 +2316,7 @@ dependencies = [
 [[package]]
 name = "home"
 version = "0.5.11"
+source = "git+https://github.com/jmfirth/firebox-home?branch=firebox-patches#5ccca86d54921d2390e8bc8f7ee8f4944e6b1c11"
 dependencies = [
  "windows-sys 0.59.0",
 ]
@@ -2775,10 +2782,12 @@ checksum = "884e2677b40cc8c339eaefcb701c32ef1fd2493d71118dc0ca4b6a736c93bd67"
 [[package]]
 name = "libc"
 version = "0.2.174"
+source = "git+https://github.com/jmfirth/firebox-libc?branch=firebox-patches#547258cee5dde4d96c4418dc9c090804dfbd7240"
 
 [[package]]
 name = "libgit2-sys"
 version = "0.18.2+1.9.1"
+source = "git+https://github.com/jmfirth/firebox-libgit2-sys?branch=firebox-patches#0787578acb3230c7874a57fbd17c96bd5373b2b0"
 dependencies = [
  "cc",
  "libc",
@@ -2833,6 +2842,7 @@ dependencies = [
 [[package]]
 name = "libssh2-sys"
 version = "0.3.1"
+source = "git+https://github.com/jmfirth/firebox-libssh2-sys?branch=firebox-patches#48661b5c229078c4808874ffd5095f3680f96909"
 dependencies = [
  "cc",
  "libc",
@@ -4206,6 +4216,7 @@ dependencies = [
 [[package]]
 name = "socket2"
 version = "0.5.10"
+source = "git+https://github.com/jmfirth/firebox-socket2?branch=firebox-patches#37b6f6348ab4ab8e4697e7e65ea6c73ca3fb7bd1"
 dependencies = [
  "libc",
  "windows-sys 0.52.0",

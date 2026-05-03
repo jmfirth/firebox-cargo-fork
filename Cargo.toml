@@ -287,52 +287,52 @@ workspace = true
 # Firebox M2 (#186): wasm32-wasmer-wasi support for gitoxide deps cargo pulls in.
 # gix-fs adds Default for Capabilities + is_executable arms for the wasm family
 # (struct has cfg-gated Default impls for windows/macos/unix only; wasm hit none).
-# Iteration-time absolute path; replace with git URL on a private mirror before
-# committing the Cargo.lock changes upstream. See docs/forks.md §3 playbook.
+# Each fork lives at github.com/jmfirth/firebox-<crate> on branch firebox-patches.
+# See docs/forks.md §3 playbook. Pushed via firebox#244 phase 1+2.
 [patch.crates-io]
-gix-fs = { path = "/Users/jfirth/projects/ai/projects/firebox-forks/gix-fs" }
+gix-fs = { git = "https://github.com/jmfirth/firebox-gix-fs", branch = "firebox-patches" }
 # gix-index 0.41.0 — extend the aix/hurd target gate to cover wasm32.
 # wasi-libc's libc::stat uses POSIX-2008 st_mtim/st_ctim, not Linux's
 # st_mtime/st_mtime_nsec. Same fork pattern as gix-fs above.
-gix-index = { path = "/Users/jfirth/projects/ai/projects/firebox-forks/gix-index" }
+gix-index = { git = "https://github.com/jmfirth/firebox-gix-index", branch = "firebox-patches" }
 # libc 0.2.174 — expose POSIX socket surface on wasm32-wasmer-wasi
 # (target_vendor="wasmer" gate). Adds src/wasi/wasmer.rs with extern fns
 # + struct/const definitions whose values were verified by C-preprocessor
 # probe against the firebox-wasix-libc sysroot. Required for socket2 below.
-libc = { path = "/Users/jfirth/projects/ai/projects/firebox-forks/libc-rs" }
+libc = { git = "https://github.com/jmfirth/firebox-libc", branch = "firebox-patches" }
 # socket2 0.5.10 — cfg-extends the unix path to compile on wasi via the
 # libc-rs fork above. Used by curl-rs to set CLOEXEC on libcurl-opened
 # sockets; compile-only on wasi for cargo's crates.io fetch path.
-socket2 = { path = "/Users/jfirth/projects/ai/projects/firebox-forks/socket2" }
+socket2 = { git = "https://github.com/jmfirth/firebox-socket2", branch = "firebox-patches" }
 # gix-pack 0.60.0 — upstream gates the gix-tempfile dep off wasm32
 # but the source unconditionally imports gix_tempfile (default feature
 # `streaming-input` enables it). Same target-gate-extension pattern as
 # gix-fs/gix-index above. gix-tempfile is wasm-clean without `signals`.
-gix-pack = { path = "/Users/jfirth/projects/ai/projects/firebox-forks/gix-pack" }
+gix-pack = { git = "https://github.com/jmfirth/firebox-gix-pack", branch = "firebox-patches" }
 # curl-sys 0.4.82+curl-8.14.1 — extend cfg(unix) to also match wasi
 # for fd_set, curl_socket_t, CURL_SOCKET_BAD, sockaddr. Backed by the
 # libc-rs fork which exposes those types on wasm32-wasmer-wasi.
-curl-sys = { path = "/Users/jfirth/projects/ai/projects/firebox-forks/curl-sys" }
+curl-sys = { git = "https://github.com/jmfirth/firebox-curl-sys", branch = "firebox-patches" }
 # libssh2-sys 0.3.1 — wasi cfg arm: libssh2_socket_t = c_int, plus a
 # stub platform_init that calls libssh2_init(0) without funneling
 # through openssl_sys. Compile-only on wasm — cargo never invokes SSH
 # transport (sparse + HTTPS handle M2/M4).
-libssh2-sys = { path = "/Users/jfirth/projects/ai/projects/firebox-forks/libssh2-sys" }
+libssh2-sys = { git = "https://github.com/jmfirth/firebox-libssh2-sys", branch = "firebox-patches" }
 # libgit2-sys 0.18.2+1.9.1 — patch vendored libgit2 thread.h/thread.c/
 # runtime.c to add `|| defined(__wasi__)` to the _POSIX_THREADS gates
 # so git_tlsdata_key resolves to pthread_key_t on wasm32-wasmer-wasi.
 # Compile-only on wasm — cargo never invokes git transport.
-libgit2-sys = { path = "/Users/jfirth/projects/ai/projects/firebox-forks/libgit2-sys" }
+libgit2-sys = { git = "https://github.com/jmfirth/firebox-libgit2-sys", branch = "firebox-patches" }
 # home 0.5.11 — extend cfg(any(unix, target_os = "redox")) to also
 # include target_os = "wasi" so home_dir_inner is defined on wasm.
 # Falls through to std::env::home_dir which respects $HOME.
-home = { path = "/Users/jfirth/projects/ai/projects/firebox-forks/home" }
+home = { git = "https://github.com/jmfirth/firebox-home", branch = "firebox-patches" }
 # curl 0.4.48 — high-level Rust wrapper around curl-sys. Adds wasi
 # cfg arms for cvt, setopt_path, path2cstr (using std::os::wasi
 # instead of std::os::unix). Also opts in to the unstable wasi_ext
 # feature for std::os::wasi::{ffi, io} access.
-curl = { path = "/Users/jfirth/projects/ai/projects/firebox-forks/curl" }
+curl = { git = "https://github.com/jmfirth/firebox-curl", branch = "firebox-patches" }
 # git2 0.20.2 — high-level Rust wrapper around libgit2-sys. Same
 # pattern: wasi cfg arms for util::bytes2path, IntoCString for OsString,
 # extend openssl_env_init no-op to include wasi.
-git2 = { path = "/Users/jfirth/projects/ai/projects/firebox-forks/git2" }
+git2 = { git = "https://github.com/jmfirth/firebox-git2", branch = "firebox-patches" }
