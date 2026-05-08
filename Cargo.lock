@@ -1175,8 +1175,7 @@ checksum = "64cd1e32ddd350061ae6edb1b082d7c54915b5c672c389143b9a63403a109f24"
 [[package]]
 name = "filetime"
 version = "0.2.25"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "35c0522e981e68cbfa8c3f978441a5f34b30b96e146b33cd3359176b50fe8586"
+source = "git+https://github.com/jmfirth/firebox-filetime?branch=firebox-patches#ae0a6a0514e99aca241b816d9e8e11898b43a993"
 dependencies = [
  "cfg-if",
  "libc",
@@ -2735,8 +2734,7 @@ dependencies = [
 [[package]]
 name = "jobserver"
 version = "0.1.33"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "38f262f097c174adebe41eb73d66ae9c06b2844fb0da69969647bbddd9b0538a"
+source = "git+https://github.com/jmfirth/firebox-jobserver?branch=firebox-patches#ab524ea12d51c86b9b3e829c01b632f310665a2f"
 dependencies = [
  "getrandom 0.3.3",
  "libc",
@@ -2787,7 +2785,7 @@ source = "git+https://github.com/jmfirth/firebox-libc?branch=firebox-patches#547
 [[package]]
 name = "libgit2-sys"
 version = "0.18.2+1.9.1"
-source = "git+https://github.com/jmfirth/firebox-libgit2-sys?branch=firebox-patches#0787578acb3230c7874a57fbd17c96bd5373b2b0"
+source = "git+https://github.com/jmfirth/firebox-libgit2-sys?branch=firebox-patches#d134d2d4b13ec8382b3fb810b33cbac098d56506"
 dependencies = [
  "cc",
  "libc",
@@ -4346,8 +4344,7 @@ dependencies = [
 [[package]]
 name = "tar"
 version = "0.4.44"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "1d863878d212c87a19c1a610eb53bb01fe12951c0501cf5a0d65f724914a667a"
+source = "git+https://github.com/jmfirth/firebox-tar?branch=firebox-patches#77a6a53e82d15ca0c0acef1a580af2fa1afe9616"
 dependencies = [
  "filetime",
  "libc",
